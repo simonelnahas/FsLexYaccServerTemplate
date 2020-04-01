@@ -1,8 +1,8 @@
 FROM node:alpine
 
 # Install node
-RUN apt-get update
-RUN apt-get install fsharp
+RUN sudo apt-get update
+RUN sudo apt-get install fsharp
 
 WORKDIR app
 
