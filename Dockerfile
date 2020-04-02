@@ -1,14 +1,16 @@
-FROM gitpod/workspace-full
+FROM fsharp
 
-RUN sudo apt-get -q update && \
-    sudo apt-get install -yq fsharp && \
-    sudo rm -rf /var/lib/apt/lists/*
+# Install node
+RUN apt-get update
+RUN apt-get -y install curl gnupg
+RUN curl -sL https://deb.nodesource.com/setup_10.x  | bash -
+RUN apt-get -y install nodejs
 
 WORKDIR app
 
 COPY package*.json ./
-RUN sudo npm install
-RUN sudo npm install -g pm2
+RUN npm install
+RUN npm install -g pm2
 
 COPY analyser analyser
 COPY dist dist
