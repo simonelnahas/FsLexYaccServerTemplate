@@ -7,8 +7,8 @@ RUN sudo apt-get -q update && \
 WORKDIR app
 
 COPY package*.json ./
-RUN npm install
-RUN npm install -g pm2
+RUN sudo npm install
+RUN sudo npm install -g pm2
 
 COPY analyser analyser
 COPY dist dist
