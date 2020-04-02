@@ -5,9 +5,7 @@ RUN sudo mkdir /nix && sudo chown `id -u`.`id -g` /nix
 # give up root privileges
 RUN sudo -k                                            
 # install Nix
-RUN curl https://nixos.org/nix/install | bash     
-# update PATH accordingly
-RUN . $HOME/.nix-profile/etc/profile.d/nix.sh          
+RUN curl https://nixos.org/nix/install | bash  && . /home/gitpod/.nix-profile/etc/profile.d/nix.sh      
 
 # Get F#
 RUN  nix-env -iA nixpkgs.fsharp
