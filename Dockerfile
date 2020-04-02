@@ -1,6 +1,8 @@
-FROM gitpod/workspace-dotnet
+FROM gitpod/workspace
 
-    
+RUN sudo apt-get update
+RUN sudo apt-get install fsharp
+
 # WORKDIR app
 
 # COPY package*.json ./
