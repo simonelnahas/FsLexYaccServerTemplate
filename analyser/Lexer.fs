@@ -1,12 +1,13 @@
-# 2 "Lexer.fsl"
+# 2 "analyser/Lexer.fsl"
  
 module Lexer
-open Microsoft.FSharp.Text.Lexing
+open FSharp.Text.Lexing
 // open the module that defines the tokens
 open System
 open Parser
+let lexeme (lexbuf : LexBuffer<char>) = new System.String(lexbuf.Lexeme)
 
-# 9 "Lexer.fs"
+# 10 "analyser/Lexer.fs"
 let trans : uint16[] array = 
     [| 
     (* State 0 *)
@@ -53,68 +54,66 @@ let trans : uint16[] array =
      [| 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 20us; 20us; 20us; 20us; 20us; 20us; 20us; 20us; 20us; 20us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; |];
     |] 
 let actions : uint16[] = [|65535us; 0us; 1us; 1us; 2us; 3us; 4us; 5us; 6us; 7us; 8us; 9us; 10us; 65535us; 65535us; 2us; 2us; 2us; 2us; 65535us; 2us; |]
-let _fslex_tables = Microsoft.FSharp.Text.Lexing.UnicodeTables.Create(trans,actions)
+let _fslex_tables = FSharp.Text.Lexing.UnicodeTables.Create(trans,actions)
 let rec _fslex_dummy () = _fslex_dummy() 
-(* Rule tokenize *)
-and tokenize  (lexbuf : Microsoft.FSharp.Text.Lexing.LexBuffer<_>) = _fslex_tokenize  0 lexbuf
-(* Rule tokenize *)
-and _fslex_tokenize  _fslex_state lexbuf =
-  match _fslex_tables.Interpret(_fslex_state,lexbuf) with
+// Rule tokenize
+and tokenize  lexbuf =
+  match _fslex_tables.Interpret(0,lexbuf) with
   | 0 -> ( 
-# 21 "Lexer.fsl"
+# 24 "analyser/Lexer.fsl"
                                  tokenize lexbuf 
-# 66 "Lexer.fs"
+# 65 "analyser/Lexer.fs"
           )
   | 1 -> ( 
-# 22 "Lexer.fsl"
+# 25 "analyser/Lexer.fsl"
                                  lexbuf.EndPos <- lexbuf.EndPos.NextLine; tokenize lexbuf; 
-# 71 "Lexer.fs"
+# 70 "analyser/Lexer.fs"
           )
   | 2 -> ( 
-# 24 "Lexer.fsl"
-                                 NUM(Double.Parse(LexBuffer<_>.LexemeString lexbuf)) 
-# 76 "Lexer.fs"
+# 27 "analyser/Lexer.fsl"
+                                 NUM(Double.Parse(lexeme lexbuf)) 
+# 75 "analyser/Lexer.fs"
           )
   | 3 -> ( 
-# 25 "Lexer.fsl"
+# 28 "analyser/Lexer.fsl"
                                  TIMES 
-# 81 "Lexer.fs"
+# 80 "analyser/Lexer.fs"
           )
   | 4 -> ( 
-# 26 "Lexer.fsl"
+# 29 "analyser/Lexer.fsl"
                                  DIV 
-# 86 "Lexer.fs"
+# 85 "analyser/Lexer.fs"
           )
   | 5 -> ( 
-# 27 "Lexer.fsl"
+# 30 "analyser/Lexer.fsl"
                                  PLUS 
-# 91 "Lexer.fs"
+# 90 "analyser/Lexer.fs"
           )
   | 6 -> ( 
-# 28 "Lexer.fsl"
+# 31 "analyser/Lexer.fsl"
                                  MINUS 
-# 96 "Lexer.fs"
+# 95 "analyser/Lexer.fs"
           )
   | 7 -> ( 
-# 29 "Lexer.fsl"
+# 32 "analyser/Lexer.fsl"
                                  POW 
-# 101 "Lexer.fs"
+# 100 "analyser/Lexer.fs"
           )
   | 8 -> ( 
-# 30 "Lexer.fsl"
+# 33 "analyser/Lexer.fsl"
                                  LPAR 
-# 106 "Lexer.fs"
+# 105 "analyser/Lexer.fs"
           )
   | 9 -> ( 
-# 31 "Lexer.fsl"
+# 34 "analyser/Lexer.fsl"
                                  RPAR 
-# 111 "Lexer.fs"
+# 110 "analyser/Lexer.fs"
           )
   | 10 -> ( 
-# 32 "Lexer.fsl"
+# 35 "analyser/Lexer.fsl"
                                  EOF 
-# 116 "Lexer.fs"
+# 115 "analyser/Lexer.fs"
           )
   | _ -> failwith "tokenize"
 
-# 3000000 "Lexer.fs"
+# 3000000 "analyser/Lexer.fs"
