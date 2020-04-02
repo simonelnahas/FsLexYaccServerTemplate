@@ -1,4 +1,4 @@
-FROM appsvc/dotnetcore
+FROM fsharp
 
 
 
