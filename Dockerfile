@@ -1,4 +1,4 @@
-FROM gitpod/workspace
+FROM gitpod/workspace-full
 
 RUN sudo apt-get -q update && \
     sudo apt-get install -yq fsharp && \
