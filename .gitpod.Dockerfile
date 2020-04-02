@@ -1,8 +1,6 @@
 FROM gitpod/workspace-full
 
-RUN sudo apt-get -q update && \
-    sudo apt-get install -yq fsharp && \
-    sudo rm -rf /var/lib/apt/lists/*
+RUN brew install mono
 
 USER gitpod
 
