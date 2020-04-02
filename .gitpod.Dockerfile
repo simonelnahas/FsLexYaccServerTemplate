@@ -1,4 +1,7 @@
-FROM ./Dockerfile
+FROM gitpod/workspace
+
+RUN sudo apt-get update
+RUN sudo apt-get install fsharp
 
 USER gitpod
 
