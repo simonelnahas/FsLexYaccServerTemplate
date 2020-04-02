@@ -10,7 +10,8 @@ ports:
 tasks:
    # runs during prebuild
   - init: yarn
-    command: yarn dev:start
+  - command: yarn dev:start 
+  - command: yarn fsharp:dev
 
 
 vscode:
