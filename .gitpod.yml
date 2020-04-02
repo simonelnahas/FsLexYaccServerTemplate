@@ -1,5 +1,6 @@
-image: gitpod/workspace-dotnet
-  # file: .gitpod.Dockerfile
+#image: gitpod/workspace-dotnet
+image: 
+  file: .gitpod.Dockerfile
 
 # List the ports you want to expose and what to do when they are served. See https://www.gitpod.io/docs/config-ports/
 ports:
@@ -12,7 +13,6 @@ tasks:
   - init: yarn
   - command: yarn dev:start 
   - command: yarn fsharp:dev
-
 
 vscode:
   extensions:
