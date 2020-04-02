@@ -37,7 +37,8 @@
     "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "fsharp:run" : "fsharpi analyser/program.fsx",
-    "fsharp:build" : "mono analyser/FsLexYacc.10.0.0/build/fslex/net46/fslex.exe analyser/Lexer.fsl --unicode && mono analyser/FsLexYacc.10.0.0/build/fsyacc/net46/fsyacc.exe analyser/Parser.fsp --module Parser",
-    "fsharp:dev" : "yarn run fsharp:build && fsharpi *.fsx"
+    "fsharp:buildLexer" : "mono analyser/FsLexYacc.10.0.0/build/fslex/net46/fslex.exe analyser/Lexer.fsl --unicode",
+    "fsharp:buildParser" : "mono analyser/FsLexYacc.10.0.0/build/fsyacc/net46/fsyacc.exe analyser/Parser.fsp --module Parser",
+    "fsharp:dev" : "npm-run-all fsharp:buildLexer fsharp:buildParser fsharp:run"
   }
 }
