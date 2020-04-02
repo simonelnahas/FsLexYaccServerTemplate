@@ -1,7 +1,7 @@
 FROM gitpod/workspace-full
 
 RUN sudo apt-get update
-RUN sudo apt-get install fsharp
+RUN sudo apt-get -y install fsharp
 
 USER gitpod
 
