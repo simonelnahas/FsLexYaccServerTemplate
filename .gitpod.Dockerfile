@@ -1,7 +1,16 @@
 FROM gitpod/workspace-full
 
-RUN brew install mono
+# create /nix
+RUN sudo mkdir /nix && sudo chown `id -u`.`id -g` /nix 
+# give up root privileges
+RUN sudo -k                                            
+# install Nix
+RUN curl https://nixos.org/nix/install | bash     
+# update PATH accordingly
+RUN . $HOME/.nix-profile/etc/profile.d/nix.sh          
 
+# Get F#
+RUN  nix-env -iA nixpkgs.fsharp
 USER gitpod
 
 # Install custom tools, runtime, etc. using apt-get
