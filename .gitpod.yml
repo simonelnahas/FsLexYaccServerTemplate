@@ -1,18 +1,15 @@
-#image: gitpod/workspace-dotnet
-image: 
-  file: .gitpod.Dockerfile
+image: gitpod/workspace-dotnet
 
-# List the ports you want to expose and what to do when they are served. See https://www.gitpod.io/docs/config-ports/
 ports:
   - port: 8080
     onOpen: open-preview
 
-# List the start up tasks. You can start them in parallel in multiple terminals. See https://www.gitpod.io/docs/config-start-tasks/
 tasks:
    # runs during prebuild
   - init: yarn
   - command: yarn dev:start 
   - command: yarn fsharp:dev
+
 
 vscode:
   extensions:
