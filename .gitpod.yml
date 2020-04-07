@@ -7,8 +7,8 @@ ports:
 tasks:
    # runs during prebuild
   - init: yarn && gp sync-done yarn
-  - command: gp sync-await yarn && yarn dev:start && gp sync-done dev
-  - command: gp sync-await dev && yarn fsharp:dev
+  - command: gp sync-await yarn && yarn dev:start
+  - command: gp sync-await yarn && yarn fsharp:dev
 
 
 vscode:
