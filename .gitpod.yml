@@ -8,7 +8,7 @@ tasks:
    # runs during prebuild
   - init: yarn && gp sync-done yarn
   - command: gp sync-await yarn && yarn dev:start
-  - command: gp sync-await yarn && yarn fsharp:dev
+  - command: gp await-port 8080 && yarn fsharp:dev
 
 
 vscode:
