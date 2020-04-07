@@ -11,8 +11,12 @@ ports:
 tasks:
    # runs during prebuild
   - init: yarn
-  - command: yarn dev:start 
-  - command: yarn fsharp:dev
+    command: |
+      gp sync-done yarninit
+      yarn dev:start 
+  - command: |
+      gp sync-await yarninit
+      yarn fsharp:dev
 
 vscode:
   extensions:
