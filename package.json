@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "@types/compression": "^1.7.0",
+    "@types/rimraf": "^3.0.0",
     "@types/uuid": "^7.0.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
@@ -36,6 +37,9 @@
     "dev": "nodemon --watch src -e ts  yarn run dev:start",
     "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "fsharp" : "fsharpi analyser/program.fsx"
+    "fsharp:run": "fsharpi analyser/program.fsx",
+    "fsharp:buildLexer": "mono analyser/FsLexYacc.10.0.0/build/fslex/net46/fslex.exe analyser/Lexer.fsl --unicode",
+    "fsharp:buildParser": "mono analyser/FsLexYacc.10.0.0/build/fsyacc/net46/fsyacc.exe analyser/Parser.fsp --module Parser",
+    "fsharp:dev": "npm-run-all fsharp:buildLexer fsharp:buildParser fsharp:run"
   }
 }
