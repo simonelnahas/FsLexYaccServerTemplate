@@ -44,7 +44,7 @@ app.post("/api/programgraph", (req, res) => {
         fs_1.default.mkdirSync(IOPath + id);
     }
     try {
-        console.error("recieved lexer:\n", body.GCProgram);
+        console.error("recieved program:\n", body.GCProgram);
         fs_1.default.writeFileSync(IOPath + id + "/program.gc", body.GCProgram);
         console.log('Generating Program Graph...');
         // exec("mono analyser/program.exe "+id, (error, stdout, stderr) => { // for compiled version
@@ -82,12 +82,53 @@ app.post("/api/interpret", (req, res) => {
         fs_1.default.mkdirSync(IOPath + id);
     }
     try {
-        console.error("recieved lexer:\n", body.GCProgram);
+        console.error("recieved program:\n", body.GCProgram);
         fs_1.default.writeFileSync(IOPath + id + "/program.gc", body.GCProgram);
         fs_1.default.writeFileSync(IOPath + id + "/memory.gc", body.Memory);
-        console.log('Generating Program Graph...');
+        console.log('Generating Interpretation...');
         // exec("mono analyser/program.exe "+id, (error, stdout, stderr) => { // for compiled version
         child_process_1.exec("fsharpi analyser/program.fsx " + id + " interpret", (error, stdout, stderr) => {
+            let response = '';
+            if (error) {
+                res.statusCode = 400;
+                response = `error: ${error.message}`;
+                console.log(response);
+            }
+            else if (stderr) {
+                res.statusCode = 401;
+                response = `stderr: ${stderr}`;
+                console.log(response);
+            }
+            else {
+                res.statusCode = 200;
+                response = stdout;
+                console.log('response \n\n', response);
+            }
+            res.send(response);
+            rimraf_1.default(IOPath + id, () => console.log("deleted " + id));
+        });
+    }
+    catch (e) {
+        res.status(400).send(e);
+        rimraf_1.default(IOPath + id, () => console.log("deleted " + id));
+    }
+});
+app.post("/api/signs", (req, res) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    const body = req.body;
+    console.log('body', req.body);
+    const id = uuid_1.v4();
+    if (!fs_1.default.existsSync(IOPath + id)) {
+        fs_1.default.mkdirSync(IOPath + id);
+    }
+    try {
+        console.error("recieved program:\n", body.GCProgram);
+        fs_1.default.writeFileSync(IOPath + id + "/program.gc", body.GCProgram);
+        console.error("recieved abstract memory:\n", body.SignsMemory);
+        fs_1.default.writeFileSync(IOPath + id + "/abstractMemory.gc", body.SignsMemory);
+        console.log('Generating Signs Analysis...');
+        // exec("mono analyser/program.exe "+id, (error, stdout, stderr) => { // for compiled version
+        child_process_1.exec("fsharpi analyser/program.fsx " + id + " signs", (error, stdout, stderr) => {
             let response = '';
             if (error) {
                 res.statusCode = 400;

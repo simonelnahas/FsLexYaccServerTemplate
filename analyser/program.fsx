@@ -52,3 +52,48 @@ Array.map
 
 // Feel free to copy this example and write some more test cases.
 // NB: currently newline character \n will not be formatted
+
+
+/// Main input
+let parseProgram id requestType = 
+  let path = "analyser/IO/"+id+"/program.gc"
+  let inputString = File.ReadAllText(path)
+  match requestType with 
+  | "graph" ->
+    // MA2
+    // printfn "%s" (ASTtoProgramMermaidGraphString (GCstringToGraph inputString true ))
+    printfn "make a graph"
+  | "interpret" ->
+    // MA3  
+    // let pathM = "analyser/IO/"+id+"/memory.gc"
+    // let memoryString = File.ReadAllText(pathM)
+    // let initMemory = parseMemoryString memoryString
+    // printfn "%s" (GCInterpreter inputString initMemory) 
+    printfn "make a interpreter"
+
+  | "signs" ->
+    // MA4  
+    // let pathM = "analyser/IO/"+id+"/abstractMemory.gc"
+    // let memoryString = File.ReadAllText(pathM)
+    // let initMemory = parseMemorySignsString memoryString
+    // // printfn "initMemory: %A" initMemory
+    // printfn "%s" (GC_Detection_of_Signs inputString initMemory) 
+    printfn "make a signs analyser"
+  | _ -> printfn "ERROR: Missing or wrong requestType. Try e.g. graph as second CL argument"  
+
+
+//fsharpc TODO: update to 10.0.0 to allow signed
+// [<EntryPoint>]
+// let main (args:string array) : int =
+//   let id = args.[0]
+//   parseProgram id
+//   0
+
+
+//fsharpi
+try
+    let id = (fsi.CommandLineArgs.[1])
+    let requestType = (fsi.CommandLineArgs.[2]) 
+    parseProgram id requestType
+with _ ->
+    printfn "Missing CommandLineArgs"
