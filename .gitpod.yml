@@ -1,5 +1,4 @@
-image: 
-  file: .gitpod.Dockerfile
+image: gitpod/workspace-dotnet:branch-jesterornot-fsharp-interactive-193@sha256:8773b78d41b29053ec8b08dc70562a1e8ea351fbd863fe9a3175b7f3ee6521f4
 
 ports:
   - port: 8080
