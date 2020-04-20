@@ -9,6 +9,7 @@ const uuid_1 = require("uuid");
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const fs_1 = __importDefault(require("fs"));
+const rimraf_1 = __importDefault(require("rimraf"));
 const child_process_1 = require("child_process");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -65,10 +66,12 @@ app.post("/api/programgraph", (req, res) => {
                 console.log('response \n\n', response);
             }
             res.send(response);
+            rimraf_1.default(IOPath + id, () => console.log("deleted " + id));
         });
     }
     catch (e) {
         res.status(400).send(e);
+        rimraf_1.default(IOPath + id, () => console.log("deleted " + id));
     }
 });
 app.post("/api/interpret", (req, res) => {
@@ -102,10 +105,12 @@ app.post("/api/interpret", (req, res) => {
                 console.log('response \n\n', response);
             }
             res.send(response);
+            rimraf_1.default(IOPath + id, () => console.log("deleted " + id));
         });
     }
     catch (e) {
         res.status(400).send(e);
+        rimraf_1.default(IOPath + id, () => console.log("deleted " + id));
     }
 });
 //# sourceMappingURL=index.js.map
