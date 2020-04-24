@@ -24,7 +24,7 @@ To execute all of the above commands run: `yarn fsharp:dev`
 
 Fork as a private repo on Github. This can be done under source control on the left side panel of GitPod.
 
-To work on a private repo on GitPod you need to have the $8 account. But this is free for students. So register with your student email.
+To work on a private repo on GitPod you need a free student account. So register with your student email.
 
 
 ## expose your program with a server
