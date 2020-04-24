@@ -20,6 +20,13 @@ then run: `yarn fsharp:run`
 To execute all of the above commands run: `yarn fsharp:dev`
 
 
+## how do i build my own project on top of this?
+
+Fork as a private repo on Github. This can be done under source control on the left side panel of GitPod.
+
+To work on a private repo on GitPod you need to have the $8 account. But this is free for students. So register with your student email.
+
+
 ## expose your program with a server
 
 WIP
