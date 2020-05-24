@@ -1,3 +1,10 @@
+///
+/// STEP Server Template using FsLexYacc parser generator
+///
+
+// The following is an implementation of the STEP Server Node.js application.
+// Please use the `EDIT HERE` indicators to modify the code such that it works for your FMT.
+
 import express from "express";
 import compression from 'compression';
 import { Request, Response } from "express";
@@ -12,14 +19,14 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const port = process.env.PORT || 8080; // default port to listen
+const port = process.env.PORT || 8080; // Default port to listen
 const IOPath = 'analyser/IO/'
 const app = express();
 
 app.set("port", port)
 app.use(compression()) // gzip website for speed
 
-// start the Express server
+// sSart the Express server
 app.listen(port, () => {
     // tslint:disable-next-line:no-console
     console.log(`server started at http://localhost:${port}`);
@@ -43,7 +50,7 @@ app.get("/api", (req: Request, res: Response): void => {
 
 app.post("/api/calculate", (req: Request, res: Response): void => {
     res.header('Access-Control-Allow-Origin', '*');
-    // get the request body
+    // Get the request body
     const body = req.body
 
     // Create temporary folder named after a newly generated UUID
@@ -54,16 +61,24 @@ app.post("/api/calculate", (req: Request, res: Response): void => {
 
     try {
 
-        // Saves code from the InputEditor SMD component with Name='GCProgram'
-        console.log("recieved program:\n", body.Program);
+        // EDIT HERE: 
+        // Such that the Name matches the InputEditor SMD Component that holds the code
+        // The following lines does:
+        // Save code from the InputEditor SMD component with Name='Program'
+        console.log("recieved program:\n", body.Program); 
         fs.writeFileSync(IOPath + id + "/program.gc", body.Program);
-
+        
         console.log('Calculating...')
-
+        
         // use this line to execute a compiled version of F# code
         // exec("mono analyser/program.exe "+id+" interpret", (error, stdout, stderr) => {
-
-        // execute FMT with F# interactive mode.
+            
+            
+        // EDIT HERE:
+        // Change `analyser/program.fsx` to the path of your FMT
+        // Optionally use a command line argument such as `calculate` in case the FMT can handle several kinds of FMT analysis
+        // The following lines does:
+        // Execute FMT with F# interactive mode.
         // And provide the path to the temporary folder with the saved code
         exec("fsharpi analyser/program.fsx "+id+" calculate", (error, stdout, stderr) => {
             let response: string = ''
@@ -80,10 +95,10 @@ app.post("/api/calculate", (req: Request, res: Response): void => {
                 response = stdout
                 console.log('response \n\n', response)
             }
-            // send back response from FMT to the STEP website client
+            // Send back response from FMT to the STEP website client
             res.send(response)
 
-            // delete temporary folder
+            // Delete temporary folder
             rimraf(IOPath+id, () => console.log("deleted "+id))
         });
 
