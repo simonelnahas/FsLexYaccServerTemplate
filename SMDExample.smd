@@ -1,0 +1,16 @@
+# Calculator
+
+Calculate something fun!
+ 
+<InputEditor 
+Name='GCProgram' 
+/>
+ 
+<RunButton 
+Name='calculate' 
+API='http://localhost:8080/api/calculate'
+/> 
+ 
+<ResultField
+OutputFromButtonName='calculate' 
+/>
