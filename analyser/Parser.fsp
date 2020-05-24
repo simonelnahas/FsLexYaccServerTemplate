@@ -1,3 +1,6 @@
+// The following code is an example of the parser specification for an interactive calculator.
+// It has been based on code by Alberto Lluch Laufente et. al. released on https://gitlab.gbar.dtu.dk/02141/mandatory-assignment
+
 // Open the file that defines the type "expr" we shall use as AST
 %{
 open TypesAST

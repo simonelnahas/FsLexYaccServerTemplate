@@ -36,19 +36,25 @@ app.get("/api", (req, res) => {
     });
     console.log('/api reached');
 });
-app.post("/api/programgraph", (req, res) => {
+app.post("/api/calculate", (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
+    // get the request body
     const body = req.body;
+    // Create temporary folder named after a newly generated UUID
     const id = uuid_1.v4();
     if (!fs_1.default.existsSync(IOPath + id)) {
         fs_1.default.mkdirSync(IOPath + id);
     }
     try {
-        console.error("recieved program:\n", body.GCProgram);
+        // Saves code from the InputEditor SMD component with Name='GCProgram'
+        console.log("recieved program:\n", body.GCProgram);
         fs_1.default.writeFileSync(IOPath + id + "/program.gc", body.GCProgram);
-        console.log('Generating Program Graph...');
-        // exec("mono analyser/program.exe "+id, (error, stdout, stderr) => { // for compiled version
-        child_process_1.exec("fsharpi analyser/program.fsx " + id + " graph", (error, stdout, stderr) => {
+        console.log('Calculating...');
+        // use this line to execute a compiled version of F# code
+        // exec("mono analyser/program.exe "+id+" interpret", (error, stdout, stderr) => {
+        // execute FMT with F# interactive mode.
+        // And provide the path to the temporary folder with the saved code
+        child_process_1.exec("fsharpi analyser/program.fsx " + id + " calculate", (error, stdout, stderr) => {
             let response = '';
             if (error) {
                 res.statusCode = 400;
@@ -65,87 +71,9 @@ app.post("/api/programgraph", (req, res) => {
                 response = stdout;
                 console.log('response \n\n', response);
             }
+            // send back response from FMT to the STEP website client
             res.send(response);
-            rimraf_1.default(IOPath + id, () => console.log("deleted " + id));
-        });
-    }
-    catch (e) {
-        res.status(400).send(e);
-        rimraf_1.default(IOPath + id, () => console.log("deleted " + id));
-    }
-});
-app.post("/api/interpret", (req, res) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    const body = req.body;
-    const id = uuid_1.v4();
-    if (!fs_1.default.existsSync(IOPath + id)) {
-        fs_1.default.mkdirSync(IOPath + id);
-    }
-    try {
-        console.error("recieved program:\n", body.GCProgram);
-        fs_1.default.writeFileSync(IOPath + id + "/program.gc", body.GCProgram);
-        fs_1.default.writeFileSync(IOPath + id + "/memory.gc", body.Memory);
-        console.log('Generating Interpretation...');
-        // exec("mono analyser/program.exe "+id, (error, stdout, stderr) => { // for compiled version
-        child_process_1.exec("fsharpi analyser/program.fsx " + id + " interpret", (error, stdout, stderr) => {
-            let response = '';
-            if (error) {
-                res.statusCode = 400;
-                response = `error: ${error.message}`;
-                console.log(response);
-            }
-            else if (stderr) {
-                res.statusCode = 401;
-                response = `stderr: ${stderr}`;
-                console.log(response);
-            }
-            else {
-                res.statusCode = 200;
-                response = stdout;
-                console.log('response \n\n', response);
-            }
-            res.send(response);
-            rimraf_1.default(IOPath + id, () => console.log("deleted " + id));
-        });
-    }
-    catch (e) {
-        res.status(400).send(e);
-        rimraf_1.default(IOPath + id, () => console.log("deleted " + id));
-    }
-});
-app.post("/api/signs", (req, res) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    const body = req.body;
-    console.log('body', req.body);
-    const id = uuid_1.v4();
-    if (!fs_1.default.existsSync(IOPath + id)) {
-        fs_1.default.mkdirSync(IOPath + id);
-    }
-    try {
-        console.error("recieved program:\n", body.GCProgram);
-        fs_1.default.writeFileSync(IOPath + id + "/program.gc", body.GCProgram);
-        console.error("recieved abstract memory:\n", body.SignsMemory);
-        fs_1.default.writeFileSync(IOPath + id + "/abstractMemory.gc", body.SignsMemory);
-        console.log('Generating Signs Analysis...');
-        // exec("mono analyser/program.exe "+id, (error, stdout, stderr) => { // for compiled version
-        child_process_1.exec("fsharpi analyser/program.fsx " + id + " signs", (error, stdout, stderr) => {
-            let response = '';
-            if (error) {
-                res.statusCode = 400;
-                response = `error: ${error.message}`;
-                console.log(response);
-            }
-            else if (stderr) {
-                res.statusCode = 401;
-                response = `stderr: ${stderr}`;
-                console.log(response);
-            }
-            else {
-                res.statusCode = 200;
-                response = stdout;
-                console.log('response \n\n', response);
-            }
-            res.send(response);
+            // delete temporary folder
             rimraf_1.default(IOPath + id, () => console.log("deleted " + id));
         });
     }

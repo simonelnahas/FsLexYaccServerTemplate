@@ -26,7 +26,6 @@ app.listen(port, () => {
 });
 
 app.use(cors());
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -42,22 +41,31 @@ app.get("/api", (req: Request, res: Response): void => {
     console.log('/api reached')
 });
 
-app.post("/api/programgraph", (req: Request, res: Response): void => {
+app.post("/api/calculate", (req: Request, res: Response): void => {
     res.header('Access-Control-Allow-Origin', '*');
+    // get the request body
     const body = req.body
-    const id = uuidv4();
 
+    // Create temporary folder named after a newly generated UUID
+    const id = uuidv4();
     if (!fs.existsSync(IOPath + id)) {
         fs.mkdirSync(IOPath + id);
     }
 
     try {
-        console.error("recieved program:\n", body.GCProgram);
-        fs.writeFileSync(IOPath + id + "/program.gc", body.GCProgram);
 
-        console.log('Generating Program Graph...')
-        // exec("mono analyser/program.exe "+id, (error, stdout, stderr) => { // for compiled version
-        exec("fsharpi analyser/program.fsx "+id+" graph", (error, stdout, stderr) => {
+        // Saves code from the InputEditor SMD component with Name='GCProgram'
+        console.log("recieved program:\n", body.Program);
+        fs.writeFileSync(IOPath + id + "/program.gc", body.Program);
+
+        console.log('Calculating...')
+
+        // use this line to execute a compiled version of F# code
+        // exec("mono analyser/program.exe "+id+" interpret", (error, stdout, stderr) => {
+
+        // execute FMT with F# interactive mode.
+        // And provide the path to the temporary folder with the saved code
+        exec("fsharpi analyser/program.fsx "+id+" calculate", (error, stdout, stderr) => {
             let response: string = ''
             if (error) {
                 res.statusCode = 400
@@ -72,97 +80,11 @@ app.post("/api/programgraph", (req: Request, res: Response): void => {
                 response = stdout
                 console.log('response \n\n', response)
             }
+            // send back response from FMT to the STEP website client
             res.send(response)
+
+            // delete temporary folder
             rimraf(IOPath+id, () => console.log("deleted "+id))
-
-        });
-
-    } catch (e) {
-        res.status(400).send(e)
-        rimraf(IOPath+id, () => console.log("deleted "+id))
-    }
-
-
-});
-
-app.post("/api/interpret", (req: Request, res: Response): void => {
-    res.header('Access-Control-Allow-Origin', '*');
-    const body = req.body
-    const id = uuidv4();
-
-    if (!fs.existsSync(IOPath + id)) {
-        fs.mkdirSync(IOPath + id);
-    }
-
-    try {
-        console.error("recieved program:\n", body.GCProgram);
-        fs.writeFileSync(IOPath + id + "/program.gc", body.GCProgram);
-        fs.writeFileSync(IOPath + id + "/memory.gc", body.Memory);
-
-        console.log('Generating Interpretation...')
-        // exec("mono analyser/program.exe "+id, (error, stdout, stderr) => { // for compiled version
-        exec("fsharpi analyser/program.fsx "+id+" interpret", (error, stdout, stderr) => {
-            let response: string = ''
-            if (error) {
-                res.statusCode = 400
-                response = `error: ${error.message}`
-                console.log(response)
-            } else if (stderr) {
-                res.statusCode = 401
-                response = `stderr: ${stderr}`
-                console.log(response)
-            } else {
-                res.statusCode = 200
-                response = stdout
-                console.log('response \n\n', response)
-            }
-            res.send(response)
-            rimraf(IOPath+id, () => console.log("deleted "+id))
-
-        });
-
-    } catch (e) {
-        res.status(400).send(e)
-        rimraf(IOPath+id, () => console.log("deleted "+id))
-    }
-});
-
-app.post("/api/signs", (req: Request, res: Response): void => {
-    res.header('Access-Control-Allow-Origin', '*');
-    const body = req.body
-    console.log('body',req.body)
-    const id = uuidv4();
-
-    if (!fs.existsSync(IOPath + id)) {
-        fs.mkdirSync(IOPath + id);
-    }
-
-    try {
-        console.error("recieved program:\n", body.GCProgram);
-        fs.writeFileSync(IOPath + id + "/program.gc", body.GCProgram);
-        console.error("recieved abstract memory:\n", body.SignsMemory);
-        fs.writeFileSync(IOPath + id + "/abstractMemory.gc", body.SignsMemory);
-
-        console.log('Generating Signs Analysis...')
-        // exec("mono analyser/program.exe "+id, (error, stdout, stderr) => { // for compiled version
-        exec("fsharpi analyser/program.fsx "+id+" signs", (error, stdout, stderr) => {
-            let response: string = ''
-            if (error) {
-                res.statusCode = 400
-                response = `error: ${error.message}`
-                console.log(response)
-            } else if (stderr) {
-                res.statusCode = 401
-                response = `stderr: ${stderr}`
-                console.log(response)
-            } else {
-                res.statusCode = 200
-                response = stdout
-                console.log('response \n\n', response)
-            }
-            res.send(response)
-            rimraf(IOPath+id, () => console.log("deleted "+id))
-
         });
 
     } catch (e) {

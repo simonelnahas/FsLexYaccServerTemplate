@@ -1,4 +1,5 @@
-// This script implements our interactive calculator
+// The following code is an example of an interactive calculator.
+// It has been based on code by Alberto Lluch Laufente et. al. released on https://gitlab.gbar.dtu.dk/02141/mandatory-assignment
 
 // We need to import a couple of modules, including the generated lexer and parser
 #r "FsLexYacc.Runtime.10.0.0/lib/net46/FsLexYacc.Runtime.dll"
@@ -34,55 +35,14 @@ let parse input =
     // return the result of parsing (i.e. value of type "expr")
     res
 
-// The response from the requests made on this website
-// will contain system output from e.g. printfn
-
-
-let strings = [|
-        ("2+2","4")
-        ("4+4","8")
-        |]
-        
-Array.map 
-        (fun (toParse,expectedResult) -> 
-            let actualResult = (eval(parse(toParse)))
-            printfn "parsing %s gives the result:  %A  expected %A" toParse actualResult expectedResult 
-        )
-        strings
-
-// Feel free to copy this example and write some more test cases.
-// NB: currently newline character \n will not be formatted
-
-
 /// Main input
-let parseProgram id requestType = 
-  let path = "analyser/IO/"+id+"/program.gc"
-  let inputString = File.ReadAllText(path)
+let parseProgram inputString requestType = 
   match requestType with 
-  | "graph" ->
-    // MA2
-    // printfn "%s" (ASTtoProgramMermaidGraphString (GCstringToGraph inputString true ))
-    printfn "make a graph"
-  | "interpret" ->
-    // MA3  
-    // let pathM = "analyser/IO/"+id+"/memory.gc"
-    // let memoryString = File.ReadAllText(pathM)
-    // let initMemory = parseMemoryString memoryString
-    // printfn "%s" (GCInterpreter inputString initMemory) 
-    printfn "make a interpreter"
+  | "calculate" ->  
+    printfn "Result: %A" (eval(parse(inputString)))
+  | _ -> printfn "ERROR: requestType is invalid"  
 
-  | "signs" ->
-    // MA4  
-    // let pathM = "analyser/IO/"+id+"/abstractMemory.gc"
-    // let memoryString = File.ReadAllText(pathM)
-    // let initMemory = parseMemorySignsString memoryString
-    // // printfn "initMemory: %A" initMemory
-    // printfn "%s" (GC_Detection_of_Signs inputString initMemory) 
-    printfn "make a signs analyser"
-  | _ -> printfn "ERROR: Missing or wrong requestType. Try e.g. graph as second CL argument"  
-
-
-//fsharpc TODO: update to 10.0.0 to allow signed
+// for F# compiled version
 // [<EntryPoint>]
 // let main (args:string array) : int =
 //   let id = args.[0]
@@ -90,10 +50,13 @@ let parseProgram id requestType =
 //   0
 
 
-//fsharpi
+// for F# interactive - `fsharpi`
+// When Node.js invokes this FMT it will take the path and read the code in that path
 try
     let id = (fsi.CommandLineArgs.[1])
     let requestType = (fsi.CommandLineArgs.[2]) 
-    parseProgram id requestType
+    let path = "analyser/IO/"+id+"/program.gc"
+    let inputString = File.ReadAllText(path)
+    parseProgram inputString requestType
 with _ ->
     printfn "Missing CommandLineArgs"
