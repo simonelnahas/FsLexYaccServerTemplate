@@ -52,7 +52,6 @@ app.post("/api/calculate", (req: Request, res: Response): void => {
     res.header('Access-Control-Allow-Origin', '*');
     // Get the request body
     const body = req.body
-    console.log(body)
 
     // Create temporary folder named after a newly generated UUID
     const id = uuidv4();
