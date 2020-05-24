@@ -55,8 +55,8 @@ let parseProgram inputString requestType =
 try
     let id = (fsi.CommandLineArgs.[1])
     let requestType = (fsi.CommandLineArgs.[2]) 
-    let path = "analyser/IO/"+id+"/program.gc"
+    let path = "analyser/IO/"+id+"/program"
     let inputString = File.ReadAllText(path)
     parseProgram inputString requestType
 with _ ->
-    printfn "Missing CommandLineArgs"
+    printfn "Error"

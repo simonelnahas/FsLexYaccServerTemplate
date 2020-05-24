@@ -52,6 +52,7 @@ app.post("/api/calculate", (req: Request, res: Response): void => {
     res.header('Access-Control-Allow-Origin', '*');
     // Get the request body
     const body = req.body
+    console.log(body)
 
     // Create temporary folder named after a newly generated UUID
     const id = uuidv4();
@@ -61,19 +62,18 @@ app.post("/api/calculate", (req: Request, res: Response): void => {
 
     try {
 
-        // EDIT HERE: 
+        // EDIT HERE:
         // Such that the Name matches the InputEditor SMD Component that holds the code
         // The following lines does:
         // Save code from the InputEditor SMD component with Name='Program'
-        console.log("recieved program:\n", body.Program); 
-        fs.writeFileSync(IOPath + id + "/program.gc", body.Program);
-        
+        console.log("recieved program:\n", body.Program);
+        fs.writeFileSync(IOPath + id + "/program", body.Program);
+
         console.log('Calculating...')
-        
+
         // use this line to execute a compiled version of F# code
         // exec("mono analyser/program.exe "+id+" interpret", (error, stdout, stderr) => {
-            
-            
+
         // EDIT HERE:
         // Change `analyser/program.fsx` to the path of your FMT
         // Optionally use a command line argument such as `calculate` in case the FMT can handle several kinds of FMT analysis
